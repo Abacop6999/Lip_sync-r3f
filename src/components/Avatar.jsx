@@ -22,10 +22,10 @@ const corresponding = {
   X: "viseme_PP", // Labios juntos (labios cerrados como en "pato")
 };
 
-
 export function Avatar(props) {
-  const { playAudio, script } = useControls({
+  const { playAudio, script, headFollow } = useControls({
     playAudio: false,
+    headFollow: true,
     script: {
       value: "welcome",
       options: ["welcome", "blue_label", "pizzas"],
@@ -118,6 +118,12 @@ export function Avatar(props) {
     actions[animation].reset().fadeIn(0.5).play();
     return () => actions[animation].fadeOut(0.5);
   }, [animation]);
+
+  useFrame((state) => {
+    if (headFollow) {
+      group.current.getObjectByName("Head").lookAt(state.camera.position);
+    }
+  });
 
   return (
     <group {...props} dispose={null} ref={group}>
